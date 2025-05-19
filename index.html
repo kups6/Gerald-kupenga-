@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GK Portal - News, Business, Health & More</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Light Theme */
+            --primary-light: #6c5ce7;
+            --secondary-light: #a29bfe;
+            --accent-light: #fd79a8;
+            --bg-light: #f5f6fa;
+            --text-light: #2d3436;
+            --card-light: #ffffff;
+            --border-light: #dfe6e9;
+            
+            /* Dark Theme */
+            --primary-dark: #8c7ae6;
+            --secondary-dark: #706fd3;
+            --accent-dark: #e84393;
+            --bg-dark: #1e272e;
+            --text-dark: #f5f6fa;
+            --card-dark: #2d3436;
+            --border-dark: #3d3d3d;
+            
+            /* Current Theme */
+            --primary: var(--primary-light);
+            --secondary: var(--secondary-light);
+            --accent: var(--accent-light);
+            --bg: var(--bg-light);
+            --text: var(--text-light);
+            --card: var(--card-light);
+            --border: var(--border-light);
+        }
+        
+        [data-theme="dark"] {
+            --primary: var(--primary-dark);
+            --secondary: var(--secondary-dark);
+            --accent: var(--accent-dark);
+            --bg: var(--bg-dark);
+            --text: var(--text-dark);
+            --card: var(--card-dark);
+            --border: var(--border-dark);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        /* Layout */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .logo p {
+            font-size: 14px;
+            color: var(--secondary);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-menu a:hover, .nav-menu a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-menu i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .category-filter {
+            margin-bottom: 30px;
+        }
+        
+        .category-filter h3 {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: var(--primary);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .filter-btn {
+            padding: 8px 12px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            flex: 1;
+            max-width: calc(100% - 280px);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+        }
+        
+        .search-container {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background-color: var(--card);
+            color: var(--text);
+            font-size: 16px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text);
+            cursor: pointer;
+        }
+        
+        /* Hero Slideshow */
+        .hero {
+            width: 100%;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            height: 500px;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+        }
+        
+        .slide-category {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .slide-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+        
+        .slide-desc {
+            font-size: 18px;
+            margin-bottom: 20px;
+            max-width: 70%;
+        }
+        
+        .slide-nav {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .slide-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        
+        .slide-dot.active {
+            background-color: white;
+        }
+        
+        /* Content Sections */
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .content-card {
+            background-color: var(--card);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .card-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-category {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .card-excerpt {
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .card-date {
+            font-size: 12px;
+            color: var(--text);
+            opacity: 0.6;
+        }
+        
+        .card-read {
+            color: var(--primary);
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Quick Tips Section */
+        .quick-tips {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .tip-card {
+            background-color: var(--card);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .tip-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tip-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .tip-text {
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.8;
+        }
+        
+        /* Places to Visit */
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .place-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .place-image {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .place-body {
+            padding: 15px;
+            background-color: var(--card);
+        }
+        
+        .place-title {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .place-location {
+            font-size: 12px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--card);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .modal-image {
+            flex: 1;
+            min-width: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .modal-body {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .modal-category {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .modal-date {
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        
+        .modal-text {
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        
+        .modal-close:hover {
+            opacity: 1;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .save-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .share-btn {
+            background-color: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text);
+            opacity: 0.7;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .quick-tips {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal-content {
+                flex-direction: column;
+            }
+            
+            .modal-image {
+                min-height: 200px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                padding: 15px 10px;
+            }
+            
+            .logo h1 {
+                font-size: 20px;
+            }
+            
+            .logo p, .nav-menu span {
+                display: none;
+            }
+            
+            .nav-menu a {
+                justify-content: center;
+                padding: 15px 0;
+            }
+            
+            .nav-menu i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .category-filter {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+                max-width: calc(100% - 80px);
+            }
+            
+            .slide-title {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                height: 400px;
+            }
+            
+            .slide-content {
+                padding: 25px;
+            }
+            
+            .slide-title {
+                font-size: 20px;
+                max-width: 100%;
+            }
+            
+            .slide-desc {
+                font-size: 16px;
+                max-width: 100%;
+            }
+            
+            .quick-tips {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                min-width: 100%;
+            }
+            
+            .user-actions {
+                justify-content: flex-end;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero {
+                height: 350px;
+            }
+            
+            .slide-content {
+                padding: 20px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-height: 95vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>GK</h1>
+                <p>Your Complete Knowledge Portal</p>
+            </div>
+            
+            <ul class="nav-menu">
+                <li><a href="#home" class="active"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="#news"><i class="fas fa-newspaper"></i> <span>News</span></a></li>
+                <li><a href="#health"><i class="fas fa-heartbeat"></i> <span>Health</span></a></li>
+                <li><a href="#mental"><i class="fas fa-brain"></i> <span>Mental Wellness</span></a></li>
+                <li><a href="#business"><i class="fas fa-briefcase"></i> <span>Business</span></a></li>
+                <li><a href="#tech"><i class="fas fa-lightbulb"></i> <span>Tech</span></a></li>
+                <li><a href="#billionaires"><i class="fas fa-money-bill-wave"></i> <span>Billionaires</span></a></li>
+                <li><a href="#places"><i class="fas fa-map-marked-alt"></i> <span>Places</span></a></li>
+            </ul>
+            
+            <div class="category-filter">
+                <h3>Filter Content</h3>
+                <div class="filter-options">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Latest</button>
+                    <button class="filter-btn">Trending</button>
+                    <button class="filter-btn">Health</button>
+                    <button class="filter-btn">Mental</button>
+                    <button class="filter-btn">Business</button>
+                    <button class="filter-btn">Tech</button>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-bar" placeholder="Search news, health tips, business...">
+                </div>
+                
+                <div class="user-actions">
+                    <button class="user-btn">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Hero Slideshow -->
+            <div class="hero" id="home">
+                <div class="slide active" style="background-image: url('https://source.unsplash.com/random/1600x900/?technology,future');">
+                    <div class="slide-content">
+                        <span class="slide-category">Tech</span>
+                        <h2 class="slide-title">Elon Musk's Neuralink Achieves Breakthrough: First Human Trial Success</h2>
+                        <p class="slide-desc">The brain-chip startup completes its first human implantation with promising results</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('https://source.unsplash.com/random/1600x900/?business,meeting');">
+                    <div class="slide-content">
+                        <span class="slide-category">Business</span>
+                        <h2 class="slide-title">Jeff Bezos Announces $10B Climate Initiative: "Earth Fund 2.0"</h2>
+                        <p class="slide-desc">Amazon founder doubles down on environmental commitments with new projects</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('https://source.unsplash.com/random/1600x900/?mindfulness,peaceful');">
+                    <div class="slide-content">
+                        <span class="slide-category">Mental Wellness</span>
+                        <h2 class="slide-title">The 5-Minute Mindfulness Trick Billionaires Swear By</h2>
+                        <p class="slide-desc">From Tim Cook to Oprah, how the ultra-successful manage stress daily</p>
+                    </div>
+                </div>
+                
+                <div class="slide" style="background-image: url('https://source.unsplash.com/random/1600x900/?travel,island');">
+                    <div class="slide-content">
+                        <span class="slide-category">Travel</span>
+                        <h2 class="slide-title">10 Private Islands Owned by Billionaires You Can Actually Visit</h2>
+                        <p class="slide-desc">Luxury retreats where money can buy you paradise (temporarily)</p>
+                    </div>
+                </div>
+                
+                <div class="slide-nav">
+                    <div class="slide-dot active" data-slide="0"></div>
+                    <div class="slide-dot" data-slide="1"></div>
+                    <div class="slide-dot" data-slide="2"></div>
+                    <div class="slide-dot" data-slide="3"></div>
+                </div>
+            </div>
+            
+            <!-- Quick Tips Section -->
+            <div class="quick-tips">
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3 class="tip-title">Health Hack</h3>
+                    <p class="tip-text">Drinking celery juice on empty stomach boosts gut health. Even Jennifer Aniston swears by it!</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="tip-title">Mind Trick</h3>
+                    <p class="tip-text">Chew gum while studying and again before test. It boosts recall by 25%! (Harvard study proved it)</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="tip-title">Money Move</h3>
+                    <p class="tip-text">Warren Buffett says: "Be fearful when others are greedy, and greedy when others are fearful."</p>
+                </div>
+                
+                <div class="tip-card">
+                    <div class="tip-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="tip-title">Tech Trend</h3>
+                    <p class="tip-text">AI job market grew 340% last year! Prompt engineering is the hottest new career.</p>
+                </div>
+            </div>
+            
+            <!-- Latest News Section -->
+            <div class="section" id="news">
+                <div class="section-header">
+                    <h2 class="section-title">🔥 Hot News Today</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card" data-modal="news1Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?elon,musk');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Tech Billionaires</span>
+                            <h3 class="card-title">Elon vs Zuck: Cage Match Back On? Musk Challenges Zuckerberg Again</h3>
+                            <p class="card-excerpt">The tech titans' feud heats up with new challenges and insults traded online</p>
+                            <div class="card-footer">
+                                <span class="card-date">2 hours ago</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="news2Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?white,house');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Politics</span>
+                            <h3 class="card-title">Biden Signs AI Executive Order: What It Means for Tech Giants</h3>
+                            <p class="card-excerpt">New regulations could impact how Google, Meta and OpenAI operate</p>
+                            <div class="card-footer">
+                                <span class="card-date">5 hours ago</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="news3Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?bitcoin');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Crypto</span>
+                            <h3 class="card-title">Bitcoin Soars Past $70K: Experts Predict New All-Time High</h3>
+                            <p class="card-excerpt">"This is just the beginning" says crypto analyst as ETF approvals fuel rally</p>
+                            <div class="card-footer">
+                                <span class="card-date">Yesterday</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Billionaires Section -->
+            <div class="section" id="billionaires">
+                <div class="section-header">
+                    <h2 class="section-title">💰 Billionaire Watch</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card" data-modal="billionaire1Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?jeff,bezos');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Wealth</span>
+                            <h3 class="card-title">Bezos Sells $4B in Amazon Stock: What's He Buying Next?</h3>
+                            <p class="card-excerpt">The Amazon founder's latest moves hint at new space and AI investments</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 15, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="billionaire2Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?bill,gates');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Philanthropy</span>
+                            <h3 class="card-title">Gates Foundation's New Target: Eradicating Malaria by 2030</h3>
+                            <p class="card-excerpt">$2B commitment to fund groundbreaking vaccine research</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 12, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="billionaire3Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?mark,zuckerberg');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Tech</span>
+                            <h3 class="card-title">Zuck's Meta Layoffs Continue: 10,000 More Jobs Cut</h3>
+                            <p class="card-excerpt">"Efficiency year" continues as Meta restructures for AI future</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 8, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Health Tips Section -->
+            <div class="section" id="health">
+                <div class="section-header">
+                    <h2 class="section-title">💊 Health Hacks</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card" data-modal="health1Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?gym,workout');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Fitness</span>
+                            <h3 class="card-title">The 11-Minute Workout That Burns Fat All Day</h3>
+                            <p class="card-excerpt">Science says this quick routine boosts metabolism for hours</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 14, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="health2Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?salad,food');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Nutrition</span>
+                            <h3 class="card-title">Eat This Breakfast to Lose Belly Fat Fast</h3>
+                            <p class="card-excerpt">Dietitians reveal the morning meal that targets visceral fat</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 10, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="health3Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?sleep,bed');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Sleep</span>
+                            <h3 class="card-title">Navy SEAL Sleep Hack: Fall Asleep in 2 Minutes</h3>
+                            <p class="card-excerpt">Military-tested method works for 96% of people who try it</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 5, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mental Wellness Section -->
+            <div class="section" id="mental">
+                <div class="section-header">
+                    <h2 class="section-title">🧠 Mental Wellness</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card" data-modal="mental1Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?meditation');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Mindfulness</span>
+                            <h3 class="card-title">5-Minute Meditation That Reduces Anxiety Immediately</h3>
+                            <p class="card-excerpt">Simple technique used by therapists to calm the nervous system fast</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 14, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="mental2Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?therapy');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Psychology</span>
+                            <h3 class="card-title">The Science of Habit Formation: How to Build Good Habits</h3>
+                            <p class="card-excerpt">Research-backed methods to make positive changes stick permanently</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 10, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="mental3Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?brain');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Neuroscience</span>
+                            <h3 class="card-title">How Social Connections Physically Change Your Brain</h3>
+                            <p class="card-excerpt">New research reveals the profound impact of relationships on brain health</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 5, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Business Tips Section -->
+            <div class="section" id="business">
+                <div class="section-header">
+                    <h2 class="section-title">💼 Business & Money</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card" data-modal="business1Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?startup');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Entrepreneurship</span>
+                            <h3 class="card-title">2024's Most Profitable Small Business Ideas</h3>
+                            <p class="card-excerpt">Market analysis reveals top opportunities with low startup costs</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 13, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="business2Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?meeting');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Leadership</span>
+                            <h3 class="card-title">How Top CEOs Structure Their Perfect Workday</h3>
+                            <p class="card-excerpt">Time management strategies from successful executives</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 9, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="business3Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?money');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Finance</span>
+                            <h3 class="card-title">Tax Strategies That Could Save You Thousands This Year</h3>
+                            <p class="card-excerpt">Accountants share legal deductions most people overlook</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 4, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Places to Visit Section -->
+            <div class="section" id="places">
+                <div class="section-header">
+                    <h2 class="section-title">✈️ Cool Places to Visit</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="places-grid">
+                    <div class="place-card" data-modal="place1Modal">
+                        <div class="place-image" style="background-image: url('https://source.unsplash.com/random/600x400/?bora,bora');"></div>
+                        <div class="place-body">
+                            <h3 class="place-title">Bora Bora Overwater Bungalows</h3>
+                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> French Polynesia</p>
+                        </div>
+                    </div>
+                    
+                    <div class="place-card" data-modal="place2Modal">
+                        <div class="place-image" style="background-image: url('https://source.unsplash.com/random/600x400/?dubai');"></div>
+                        <div class="place-body">
+                            <h3 class="place-title">Burj Khalifa Sky Lounge</h3>
+                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> Dubai, UAE</p>
+                        </div>
+                    </div>
+                    
+                    <div class="place-card" data-modal="place3Modal">
+                        <div class="place-image" style="background-image: url('https://source.unsplash.com/random/600x400/?santorini');"></div>
+                        <div class="place-body">
+                            <h3 class="place-title">Santorini Cliff Villas</h3>
+                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> Greece</p>
+                        </div>
+                    </div>
+                    
+                    <div class="place-card" data-modal="place4Modal">
+                        <div class="place-image" style="background-image: url('https://source.unsplash.com/random/600x400/?maldives');"></div>
+                        <div class="place-body">
+                            <h3 class="place-title">Maldives Private Island</h3>
+                            <p class="place-location"><i class="fas fa-map-marker-alt"></i> Maldives</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tech Section -->
+            <div class="section" id="tech">
+                <div class="section-header">
+                    <h2 class="section-title">🤖 Tech & AI</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card" data-modal="tech1Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?robot');"></div>
+                        <div class="card-body">
+                            <span class="card-category">AI</span>
+                            <h3 class="card-title">ChatGPT-5: What We Know About the Next Big Leap</h3>
+                            <p class="card-excerpt">Leaked details suggest capabilities beyond our wildest expectations</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 12, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="tech2Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?smartphone');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Gadgets</span>
+                            <h3 class="card-title">iPhone 16 Leaks: The 5 Biggest Upgrades Coming</h3>
+                            <p class="card-excerpt">From periscope zoom to the new "Capture Button" - what to expect</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 8, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-card" data-modal="tech3Modal">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/600x400/?space');"></div>
+                        <div class="card-body">
+                            <span class="card-category">Space</span>
+                            <h3 class="card-title">SpaceX Starship: Next Test Flight Date Revealed</h3>
+                            <p class="card-excerpt">Musk says "This one will reach orbit" as FAA approves launch</p>
+                            <div class="card-footer">
+                                <span class="card-date">Mar 3, 2024</span>
+                                <a href="#" class="card-read">Read <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>Made with ❤️ by Gerald Kupenga | © 2024 GK Portal | All Rights Reserved</p>
+            </div>
+        </main>
+    </div>
+    
+    <!-- News Modal 1 -->
+    <div class="modal" id="news1Modal">
+        <div class="modal-content">
+            <div class="modal-image" style="background-image: url('https://source.unsplash.com/random/800x600/?elon,musk,fight');"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-category">Tech Billionaires</span>
+                        <h2 class="modal-title">Elon vs Zuck: Cage Match Back On? Musk Challenges Zuckerberg Again</h2>
+                        <p class="modal-date">Published: March 16, 2024 | Updated: 2 hours ago</p>
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                
+                <div class="modal-text">
+                    <p>The tech world is buzzing again as Elon Musk renewed his challenge to Mark Zuckerberg for a cage match, tweeting "I'm ready anytime, anywhere" along with a meme of himself as a Viking warrior.</p>
+                    
+                    <p>This comes after months of silence following their initial feud that began when Meta launched Threads, a Twitter competitor. Insiders say the rivalry has only intensified as both companies push further into AI development.</p>
+                    
+                    <h3>Why This Matters</h3>
+                    <p>Beyond the meme-worthy spectacle, this feud represents:</p>
+                    <ul>
+                        <li>A battle for social media dominance (X vs Threads)</li>
+                        <li>Diverging visions for AI's future</li>
+                        <li>The personal rivalry between two of tech's most powerful figures</li>
+                    </ul>
+                    
+                    <p>Zuckerberg hasn't publicly responded yet, but sources close to Meta say he's been training in MMA 3x weekly since the initial challenge. Musk claims to have a "secret weapon" but won't elaborate.</p>
+                    
+                    <h3>What's Next?</h3>
+                    <p>Oddsmakers currently give Zuckerberg 2:1 odds due to his consistent training. Potential venues being discussed include the Vegas Sphere or even the Colosseum in Rome. One thing's certain - the internet would break if this fight actually happens.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn save-btn"><i class="far fa-bookmark"></i> Save Article</button>
+                    <button class="modal-btn share-btn"><i class="fas fa-share"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Billionaire Modal 1 -->
+    <div class="modal" id="billionaire1Modal">
+        <div class="modal-content">
+            <div class="modal-image" style="background-image: url('https://source.unsplash.com/random/800x600/?jeff,bezos,space');"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-category">Wealth</span>
+                        <h2 class="modal-title">Bezos Sells $4B in Amazon Stock: What's He Buying Next?</h2>
+                        <p class="modal-date">Published: March 15, 2024</p>
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                
+                <div class="modal-text">
+                    <p>Jeff Bezos just unloaded another $4 billion in Amazon shares, bringing his total sales to $12 billion this year alone. So where's all that money going?</p>
+                    
+                    <h3>The Breakdown</h3>
+                    <p>Our sources indicate three likely destinations:</p>
+                    
+                    <h4>1. Blue Origin Expansion</h4>
+                    <p>Bezos has pledged $10B to his space company by 2030. With the New Glenn rocket finally ready for launch, he may be doubling down.</p>
+                    
+                    <h4>2. AI Startups</h4>
+                    <p>Bezos has quietly invested in three AI companies this year through his Bezos Expeditions fund.</p>
+                    
+                    <h4>3. Luxury Real Estate</h4>
+                    <p>Rumors swirl about a $200M Hawaiian estate purchase and a private Caribbean island.</p>
+                    
+                    <h3>Why Now?</h3>
+                    <p>Amazon stock hit all-time highs this month, making it the perfect time to diversify. As one analyst put it: "When you're worth $200B, $4B is just rebalancing your portfolio."</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn save-btn"><i class="far fa-bookmark"></i> Save Article</button>
+                    <button class="modal-btn share-btn"><i class="fas fa-share"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Health Modal 1 -->
+    <div class="modal" id="health1Modal">
+        <div class="modal-content">
+            <div class="modal-image" style="background-image: url('https://source.unsplash.com/random/800x600/?workout,gym');"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-category">Fitness</span>
+                        <h2 class="modal-title">The 11-Minute Workout That Burns Fat All Day</h2>
+                        <p class="modal-date">Published: March 14, 2024</p>
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                
+                <div class="modal-text">
+                    <p>Scientists at the University of Copenhagen discovered a shockingly simple routine that keeps your metabolism fired up for hours after you finish exercising. Best part? It takes just 11 minutes!</p>
+                    
+                    <h3>The Routine</h3>
+                    <p>Do this sequence 3x with 30 sec rest between rounds:</p>
+                    <ol>
+                        <li><strong>Jump Squats</strong> - 45 seconds</li>
+                        <li><strong>Push-ups</strong> - 45 seconds</li>
+                        <li><strong>Mountain Climbers</strong> - 45 seconds</li>
+                        <li><strong>Plank Shoulder Taps</strong> - 45 seconds</li>
+                    </ol>
+                    
+                    <h3>Why It Works</h3>
+                    <p>This combo creates the "afterburn effect" (EPOC) where your body continues burning calories at an elevated rate for up to 48 hours post-workout. Participants in the study burned an extra 200 calories per day without changing their diet!</p>
+                    
+                    <p><strong>Pro Tip:</strong> Do this first thing in the morning to maximize fat burning throughout the day.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn save-btn"><i class="far fa-bookmark"></i> Save Article</button>
+                    <button class="modal-btn share-btn"><i class="fas fa-share"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Business Modal 1 -->
+    <div class="modal" id="business1Modal">
+        <div class="modal-content">
+            <div class="modal-image" style="background-image: url('https://source.unsplash.com/random/800x600/?startup,office');"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-category">Entrepreneurship</span>
+                        <h2 class="modal-title">2024's Most Profitable Small Business Ideas</h2>
+                        <p class="modal-date">Published: March 13, 2024</p>
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                
+                <div class="modal-text">
+                    <p>After analyzing market trends and success stories, these 5 business ideas stand out for 2024 with the best profit potential and lowest startup costs:</p>
+                    
+                    <h3>1. AI Content Agency</h3>
+                    <p>Help businesses implement AI tools for content creation. Charge $500-$5,000/month per client. Startup costs: Just a laptop and ChatGPT Plus ($20/mo).</p>
+                    
+                    <h3>2. Micro SaaS</h3>
+                    <p>Build niche software solutions using no-code platforms. Example: A $29/mo tool that helps dentists manage appointment reminders.</p>
+                    
+                    <h3>3. High-Ticket Coaching</h3>
+                    <p>Package your expertise (even if you're not an expert yet). The "teach what you're learning" model works amazingly well.</p>
+                    
+                    <h3>4. Print-on-Demand 2.0</h3>
+                    <p>Use AI to create unique designs for t-shirts, mugs etc. No inventory needed - sites like Printify handle production.</p>
+                    
+                    <h3>5. Local Service Arbitrage</h3>
+                    <p>Book cleaning/junk removal/etc. jobs at market rate, outsource to contractors at lower rates, keep the difference.</p>
+                    
+                    <p><strong>Key Trend:</strong> The best opportunities combine AI leverage with old-school business fundamentals.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn save-btn"><i class="far fa-bookmark"></i> Save Article</button>
+                    <button class="modal-btn share-btn"><i class="fas fa-share"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Place Modal 1 -->
+    <div class="modal" id="place1Modal">
+        <div class="modal-content">
+            <div class="modal-image" style="background-image: url('https://source.unsplash.com/random/800x600/?bora,bora,luxury');"></div>
+            <div class="modal-body">
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-category">Travel</span>
+                        <h2 class="modal-title">Bora Bora Overwater Bungalows: Ultimate Luxury</h2>
+                        <p class="modal-date">Published: March 12, 2024</p>
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                
+                <div class="modal-text">
+                    <p>Bora Bora's iconic overwater bungalows offer the most Instagrammable vacation on Earth. Here's what makes them special:</p>
+                    
+                    <h3>What You Get</h3>
+                    <ul>
+                        <li>Private deck with ladder directly into crystal clear lagoon</li>
+                        <li>Glass floor panels to watch fish swim beneath you</li>
+                        <li>Personal butler service 24/7</li>
+                        <li>Breakfast delivered by canoe each morning</li>
+                    </ul>
+                    
+                    <h3>Best Resorts</h3>
+                    <p><strong>1. Four Seasons</strong> - Most luxurious, with mountain views</p>
+                    <p><strong>2. Conrad</strong> - Best for honeymooners</p>
+                    <p><strong>3. Intercontinental</strong> - Most affordable luxury option</p>
+                    
+                    <h3>Pro Tips</h3>
+                    <p>• Visit April-May or September-October for best weather and rates</p>
+                    <p>• Book 6-12 months in advance for premium bungalows</p>
+                    <p>• Bring an underwater camera - the snorkeling is incredible!</p>
+                    
+                    <p><strong>Cost:</strong> $1,500-$3,500/night but worth every penny for this bucket-list experience.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="modal-btn save-btn"><i class="far fa-bookmark"></i> Save Article</button>
+                    <button class="modal-btn share-btn"><i class="fas fa-share"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.dataset.theme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+            themeToggle.innerHTML = body.dataset.theme === 'dark' 
+                ? '<i class="fas fa-sun"></i>' 
+                : '<i class="fas fa-moon"></i>';
+            
+            localStorage.setItem('theme', body.dataset.theme);
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.dataset.theme = savedTheme;
+            themeToggle.innerHTML = savedTheme === 'dark' 
+                ? '<i class="fas fa-sun"></i>' 
+                : '<i class="fas fa-moon"></i>';
+        }
+        
+        // Slideshow Functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slide-dot');
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                showSlide(parseInt(this.getAttribute('data-slide')));
+            });
+        });
+        
+        // Auto-advance slides
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 6000);
+        
+        // Filter Buttons
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Filter content would go here
+            });
+        });
+        
+        // Modal Functionality
+        const contentCards = document.querySelectorAll('.content-card, .place-card');
+        const modals = document.querySelectorAll('.modal');
+        const closeBtns = document.querySelectorAll('.modal-close');
+        
+        contentCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const modalId = this.getAttribute('data-modal');
+                document.getElementById(modalId).style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // Close modal when clicking outside content
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Navigation to sections
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                if(targetId) {
+                    document.getElementById(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Search Functionality
+        const searchBar = document.querySelector('.search-bar');
+        searchBar.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                alert('Search functionality would show results for: ' + this.value);
+            }
+        });
+    </script>
+</body>
+</html>
